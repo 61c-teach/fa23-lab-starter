@@ -14,7 +14,7 @@ main:
     lw a1 0(a1)
 
     # call ex2
-    jal ex2
+    jal ra ex2
 
     # prints the output of ex2
     mv a1 a0
@@ -30,18 +30,18 @@ ex2:
     # this function is a recursive pow function
     # a0 contains the base
     # a1 contains the power to raise to
-    # the return value should be the result of a0^a1
+    # the jr raurn value should be the result of a0^a1
     #     where ^ is the exponent operator, not XOR
     sw s0 0(sp)
 
-    # return 1 if a1 == 0
+    # jr raurn 1 if a1 == 0
     beq a1 x0 ex2_zero_case
 
-    # otherwise, return ex2(a0, a1-1) * a0
+    # otherwise, jr raurn ex2(a0, a1-1) * a0
     mv s0 a0      # save a0 in s0
     addi a1 a1 -1 # decrement a1
 
-    jal ex2       # call ex2(a0, a1-1)
+    jal ra ex2       # call ex2(a0, a1-1)
 
     mul a0 a0 s0  # multiply ex2(a0, a1-1) by s0
                   # (which contains the value of a0)
@@ -54,4 +54,4 @@ ex2_zero_case:
 ex2_end:
     lw s0 0(sp)
 
-    ret
+    jr ra

@@ -13,11 +13,11 @@ exp_inc_array_result:
 
 .text
 main:
-    # pow: should return 2 ** 7 = 128
+    # pow: should jr raurn 2 ** 7 = 128
     li a0, 2
     li a1, 7
-    jal pow
-    li t0, 128 # verifies that pow returned the right value
+    jal ra pow
+    li t0, 128 # verifies that pow jr raurned the right value
     beq a0, t0, next_test
     la a0, pow_string
     j failure
@@ -26,8 +26,8 @@ next_test:
     # inc_arr: increments "array" in place
     la a0, array
     li a1, 5
-    jal inc_arr
-    jal check_arr # Verifies inc_arr returned the right value
+    jal ra inc_arr
+    jal ra check_arr # Verifies inc_arr jr raurned the right value
     # all tests pass, exit normally
     li a0, 4
     la a1, success_message
@@ -44,7 +44,7 @@ next_test:
 #         s0 *= a0;
 #         a1 -= 1;
 #     }
-#     return s0;
+#     jr raurn s0;
 # }
 #
 pow:
@@ -62,7 +62,7 @@ pow_end:
     # BEGIN EPILOGUE
     # FIXME Need to restore the calle saved register(s)
     # END EPILOGUE
-    ret
+    jr ra
 
 # Increments the elements of an array in-place.
 # a0 holds the address of the start of the array, and a1 holds
@@ -88,7 +88,7 @@ inc_arr_loop:
     # FIXME Add code to preserve the value in t0 before we call helper_fn
     # Also ask yourself this: why don't we need to preserve t1?
     #
-    jal helper_fn
+    jal ra helper_fn
     # FIXME Restore t0
     # Finished call for helper_fn
     addi t0, t0, 1 # Increment counter
@@ -99,10 +99,10 @@ inc_arr_end:
     lw ra, 0(sp)
     addi sp, sp, 4
     # END EPILOGUE
-    ret
+    jr ra
 
 # This helper function adds 1 to the value at the memory address in a0.
-# It doesn't return anything.
+# It doesn't jr raurn anything.
 # C pseudocode for what it does: "*a0 = *a0 + 1"
 #
 # This function also violates calling convention, but it might not
@@ -119,7 +119,7 @@ helper_fn:
     # BEGIN EPILOGUE
     # FIXME: YOUR CODE HERE
     # END EPILOGUE
-    ret
+    jr ra
 
 # YOU CAN IGNORE EVERYTHING BELOW THIS COMMENT
 
@@ -142,11 +142,11 @@ continue:
     addi t1, t1, 4
     j check_arr_loop
 check_arr_end:
-    ret
+    jr ra
 
 
 # prints a failure message, then terminates the program
-# Since we don't return back to the caller, this is like executing an exception
+# Since we don't jr raurn back to the caller, this is like executing an exception
 # inputs: a0 = the name of the test that failed
 failure:
 	mv a3, a0 # load the name of the test that failed
